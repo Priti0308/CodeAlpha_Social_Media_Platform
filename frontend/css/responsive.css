@@ -1,0 +1,93 @@
+/* ==========================================================================
+   CODEALPHA SOCIAL - RESPONSIVE STYLING
+   ========================================================================== */
+
+/* Tablet view styling */
+@media (max-width: 991px) {
+    .feed-layout {
+        grid-template-columns: 1fr;
+        max-width: 600px;
+    }
+    
+    .feed-sidebar {
+        display: none; /* Hide suggestion sidebar on smaller viewports */
+    }
+    
+    .navbar-container {
+        max-width: 100%;
+    }
+}
+
+/* Mobile view styling */
+@media (max-width: 767px) {
+    .navbar {
+        height: 56px;
+    }
+    
+    .nav-search {
+        display: none; /* Hide search input on mobile header */
+    }
+    
+    .nav-menu {
+        gap: 16px;
+    }
+    
+    /* Show bottom navigation bar */
+    .mobile-bottom-nav {
+        display: flex;
+    }
+    
+    /* Hide top menus except brand */
+    .navbar .nav-menu {
+        display: none;
+    }
+    
+    .feed-layout {
+        padding: 0 10px 80px;
+        margin-top: 16px;
+    }
+    
+    .profile-header {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 20px;
+        padding-bottom: 24px;
+    }
+    
+    .profile-avatar-wrapper {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .profile-info-header {
+        justify-content: center;
+    }
+    
+    .profile-stats {
+        justify-content: center;
+        gap: 24px;
+        font-size: 0.9rem;
+    }
+    
+    .posts-grid {
+        gap: 8px;
+    }
+    
+    .auth-container {
+        flex-direction: column;
+        max-width: 420px;
+    }
+    
+    .auth-hero {
+        padding: 30px;
+        text-align: center;
+    }
+    .auth-hero h1 {
+        font-size: 2rem;
+    }
+    
+    .auth-form-side {
+        width: 100%;
+        padding: 30px 20px;
+    }
+}

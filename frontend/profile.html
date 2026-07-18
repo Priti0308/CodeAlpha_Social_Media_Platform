@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile • CodeAlpha Social</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="/css/feed.css">
+    <link rel="stylesheet" href="/css/animations.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+    <div class="profile-container anim-fade-in" style="margin-top: 24px;">
+        <!-- Banner cover photo -->
+        <div class="profile-cover-wrapper">
+            <div style="width:100%; height:100%; background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);"></div>
+        </div>
+
+        <!-- Profile Header Details -->
+        <header class="profile-header">
+            <div class="profile-avatar-container">
+                <div class="profile-avatar-wrapper">
+                    <img id="profile-avatar-img" src="/assets/images/default-avatar.svg" alt="Avatar">
+                </div>
+            </div>
+
+            <div class="profile-info">
+                <div class="profile-info-header">
+                    <h2 class="profile-username" id="profile-display-username">username</h2>
+                    <div id="profile-action-btn-container">
+                        <!-- Filled by JS (Edit Profile or Follow button) -->
+                    </div>
+                </div>
+
+                <ul class="profile-stats">
+                    <li><span class="profile-stats-num" id="profile-posts-num">0</span> posts</li>
+                    <li>
+                        <a id="profile-followers-link" href="#">
+                            <span class="profile-stats-num" id="profile-followers-num">0</span> followers
+                        </a>
+                    </li>
+                    <li>
+                        <a id="profile-following-link" href="#">
+                            <span class="profile-stats-num" id="profile-following-num">0</span> following
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="profile-bio">
+                    <span class="profile-fullname" id="profile-display-name">Full Name</span>
+                    <p id="profile-display-bio">User bio details</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- View Tabs Header -->
+        <div class="profile-tabs-header">
+            <div class="profile-tab active" id="tab-grid"><span>Grid View</span></div>
+            <div class="profile-tab" id="tab-reels"><span>🎬 Reels</span></div>
+            <div class="profile-tab" id="tab-list"><span>List View</span></div>
+        </div>
+
+        <!-- Grid view container -->
+        <div class="posts-grid" id="profile-posts-grid">
+            <!-- Loaded dynamically -->
+        </div>
+
+        <!-- Reels view container (hidden by default) -->
+        <div class="reels-grid" id="profile-reels-grid" style="display: none;">
+            <!-- Loaded dynamically -->
+        </div>
+
+        <!-- List view container (hidden by default) -->
+        <div id="profile-posts-list" style="display: none; max-width: 600px; margin: 28px auto 0;">
+            <!-- Loaded dynamically -->
+        </div>
+    </div>
+
+    <!-- Create Content Modal -->
+    <div id="create-content-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center;">
+        <div class="card anim-scale-in" style="width: 100%; max-width: 480px; padding: 24px; position: relative; background: #FFFFFF; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+            <div style="position: absolute; top: 15px; right: 15px; font-size: 1.8rem; cursor: pointer; color: #666; line-height: 1;" onclick="closeCreateModal()">&times;</div>
+            <h3 id="create-modal-title" style="margin-top: 0; margin-bottom: 20px; font-size: 1.4rem; font-weight: 800; background: var(--pink-orange); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Create New Post</h3>
+            
+            <form id="create-content-form">
+                <input type="hidden" id="create-content-type" value="post">
+                
+                <!-- File upload selection -->
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label class="form-label" id="create-file-label" style="font-weight: 600; display: block; margin-bottom: 8px;">Select Photo</label>
+                    <input type="file" id="create-file-input" class="form-input" style="padding: 10px;" required>
+                </div>
+
+                <!-- Preview container -->
+                <div id="create-preview-container" style="display: none; margin-bottom: 16px; text-align: center; border-radius: 8px; overflow: hidden; background: #fafafa; border: 1px dashed #dbdbdb; padding: 10px; min-height: 100px; align-items: center; justify-content: center;">
+                    <img id="create-img-preview" src="" style="max-height: 200px; max-width: 100%; display: none; object-fit: contain; border-radius: 4px; margin: 0 auto;">
+                    <video id="create-video-preview" src="" style="max-height: 200px; max-width: 100%; display: none; object-fit: contain; border-radius: 4px; margin: 0 auto;" controls muted></video>
+                </div>
+
+                <!-- Caption text area (hidden for story) -->
+                <div class="form-group" id="create-caption-group" style="margin-bottom: 20px;">
+                    <label class="form-label" style="font-weight: 600; display: block; margin-bottom: 8px;">Caption</label>
+                    <textarea id="create-caption-input" class="form-input" placeholder="Write a caption..." rows="3" maxlength="2200" style="width: 100%; border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; font-family: inherit; box-sizing: border-box;"></textarea>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                    <button type="button" class="btn btn-secondary btn-round" style="padding: 8px 18px; font-size: 0.88rem;" onclick="closeCreateModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-round" style="background: var(--pink-orange); border: none; color: white; padding: 8px 18px; font-size: 0.88rem; font-weight: 600;">Share</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/js/utils.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/profile.js"></script>
+    <script src="/js/follow.js"></script>
+</body>
+</html>

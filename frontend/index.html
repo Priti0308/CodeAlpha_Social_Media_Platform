@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeAlpha Social • Discover & Share Real Moments</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/animations.css">
+    <style>
+        /* White-Pink Theme & 3D Tilt Overrides */
+        :root {
+            --pink-primary: #E1306C;
+            --pink-dark: #C13584;
+            --pink-orange: linear-gradient(135deg, #FCAF45 0%, #F77737 30%, #E1306C 70%, #C13584 100%);
+            --pink-glow: 0 0 20px rgba(225, 48, 108, 0.25);
+        }
+
+        body {
+            background-color: #FAFAFA;
+            color: #262626;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #FFFFFF 0%, #FFF5F7 60%, #FFE9EC 100%);
+            padding: 120px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* 3D Perspective Card Layout */
+        .perspective-container {
+            perspective: 1500px;
+            margin: 40px auto 0;
+            max-width: 480px;
+        }
+
+        .tilt-card-3d {
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(225, 48, 108, 0.15);
+            box-shadow: 0 20px 40px rgba(225, 48, 108, 0.08), 0 1px 3px rgba(0,0,0,0.02);
+            padding: 30px;
+            transform: rotateX(12deg) rotateY(-10deg) rotateZ(2deg);
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
+        }
+        .tilt-card-3d:hover {
+            transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1.03);
+            box-shadow: 0 30px 60px rgba(225, 48, 108, 0.14), 0 0 25px rgba(225, 48, 108, 0.15);
+        }
+
+        .tilt-child-3d {
+            transform: translateZ(50px);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-pink-gradient {
+            background: var(--pink-orange);
+            color: #FFFFFF;
+            border: none;
+            box-shadow: 0 4px 15px rgba(225, 48, 108, 0.25);
+            font-weight: 700;
+        }
+        .btn-pink-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(225, 48, 108, 0.35);
+        }
+
+        .feature-card-pink {
+            background: #FFFFFF;
+            border: 1px solid rgba(225, 48, 108, 0.08);
+            border-radius: var(--radius-md);
+            padding: 32px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-style: preserve-3d;
+        }
+        .feature-card-pink:hover {
+            transform: translateY(-8px) scale(1.01);
+            border-color: rgba(225, 48, 108, 0.25);
+            box-shadow: 0 15px 30px rgba(225, 48, 108, 0.06);
+        }
+
+        .feature-icon-pink {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: rgba(225, 48, 108, 0.06);
+            color: var(--pink-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar Header -->
+    <header style="padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); background-color: var(--white);">
+        <div style="font-size: 1.6rem; font-weight: 800; background: var(--pink-orange); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">CodeAlpha Social</div>
+        <div style="display: flex; gap: 16px;">
+            <a href="/login.html" class="btn btn-secondary btn-round" style="padding: 6px 18px; font-size: 0.88rem; border-color: rgba(225, 48, 108, 0.2); color: var(--pink-primary);">Sign In</a>
+            <a href="/register.html" class="btn btn-pink-gradient btn-round" style="padding: 6px 18px; font-size: 0.88rem;">Get Started</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section anim-fade-in">
+        <div style="max-width: 800px; margin: 0 auto; z-index: 2; position: relative;">
+            <h1 style="font-size: 3.8rem; font-weight: 800; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 20px; background: var(--pink-orange); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Connect, Share, and Inspire</h1>
+            <p style="font-size: 1.25rem; line-height: 1.6; margin-bottom: 36px; color: #555555; max-width: 600px; margin-left: auto; margin-right: auto;">A modern, elegant photo-sharing network designed to capture your real moments and showcase your visual journey.</p>
+            
+            <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 30px;">
+                <a href="/register.html" class="btn btn-pink-gradient btn-round" style="font-size: 1.05rem; padding: 12px 28px;">Create Free Account</a>
+                <a href="/login.html" class="btn btn-secondary btn-round" style="font-size: 1.05rem; padding: 12px 28px; border-color: rgba(225, 48, 108, 0.2); color: var(--pink-primary);">Explore Feed</a>
+            </div>
+        </div>
+
+        <!-- 3D Interactive Card Showcase -->
+        <div class="perspective-container">
+            <div class="tilt-card-3d">
+                <div class="tilt-child-3d">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--pink-orange);"></div>
+                            <div style="text-align: left;">
+                                <div style="font-size: 0.85rem; font-weight: 700;">codealpha_social</div>
+                                <div style="font-size: 0.72rem; color: #8e8e8e;">3D Visual Space</div>
+                            </div>
+                        </div>
+                        <span style="font-size: 1.1rem; color: #8e8e8e;">•••</span>
+                    </div>
+                    
+                    <!-- Simulated Premium Post Image -->
+                    <div style="width: 100%; height: 260px; border-radius: var(--radius-md); background: linear-gradient(135deg, #FF9966 0%, #FF5E62 50%, #FF007F 100%); display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 3rem; box-shadow: inset 0 0 50px rgba(0,0,0,0.15);">
+                        📷
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; margin-top: 14px; align-items: center;">
+                        <div style="display: flex; gap: 12px; font-size: 1.3rem;">
+                            <span>💖</span>
+                            <span>💬</span>
+                            <span>🔗</span>
+                        </div>
+                        <span style="font-size: 0.8rem; font-weight: 700; color: var(--pink-primary);">12.5k likes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section style="padding: 80px 20px; max-width: 1100px; margin: 0 auto;" class="anim-slide-up">
+        <h2 style="font-size: 2.2rem; font-weight: 800; text-align: center; margin-bottom: 48px; color: #262626;">Instagram-Inspired Design</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px;">
+            <div class="feature-card-pink">
+                <div class="feature-icon-pink">📸</div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 12px;">Visual Moments</h3>
+                <p style="color: #666666; line-height: 1.6; font-size: 0.95rem;">Upload captured moments with description tags, and explore platform posts in grids or list views.</p>
+            </div>
+            <div class="feature-card-pink">
+                <div class="feature-icon-pink">💫</div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 12px;">Interactive Stories</h3>
+                <p style="color: #666666; line-height: 1.6; font-size: 0.95rem;">Add updates to your active stories line. Auto-delete profiles after 24 hours of display expiry.</p>
+            </div>
+            <div class="feature-card-pink">
+                <div class="feature-icon-pink">💖</div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 12px;">Double-Click Likes</h3>
+                <p style="color: #666666; line-height: 1.6; font-size: 0.95rem;">Tap twice on post photos to trigger instant like animations. Comments and network follow alerts keep you connected.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background-color: #FFFFFF; border-top: 1px solid var(--border-color); padding: 40px 20px; text-align: center; color: #8e8e8e; font-size: 0.88rem;">
+        <p>&copy; 2026 CodeAlpha Social. Made with Express & MongoDB. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/js/utils.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>

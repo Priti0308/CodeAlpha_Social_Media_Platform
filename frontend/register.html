@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up • CodeAlpha Social</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap" rel="stylesheet">
+    <style>
+        /* Instagram UI Custom Layout overrides */
+        body {
+            background-color: #FAFAFA !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+        }
+
+        .ig-login-layout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 350px;
+        }
+
+        /* Forms Column Stack */
+        .auth-forms-column {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .ig-card {
+            background-color: #FFFFFF;
+            border: 1px solid #DBDBDB;
+            padding: 25px 30px;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            border-radius: 1px;
+        }
+
+        .ig-logo {
+            font-family: 'Grand Hotel', cursive;
+            font-size: 3.2rem;
+            color: #262626;
+            margin-bottom: 12px;
+            text-align: center;
+            user-select: none;
+        }
+
+        .ig-input-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 6px;
+        }
+
+        .ig-input {
+            width: 100%;
+            padding: 9px 8px 7px 8px;
+            font-size: 0.75rem;
+            background-color: #FAFAFA;
+            border: 1px solid #DBDBDB;
+            border-radius: 3px;
+            outline: none;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+        .ig-input:focus {
+            border-color: #A8A8A8;
+        }
+
+        .btn-ig-submit {
+            width: 100%;
+            background-color: #0095F6;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            padding: 7px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background-color 0.2s, opacity 0.2s;
+        }
+        .btn-ig-submit:hover:not(:disabled) {
+            background-color: #1877F2;
+        }
+        .btn-ig-submit:disabled {
+            background-color: #0095F6;
+            opacity: 0.3;
+            cursor: default;
+        }
+
+        .btn-toggle-password {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #262626;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .ig-prompt-card {
+            background-color: #FFFFFF;
+            border: 1px solid #DBDBDB;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.88rem;
+            border-radius: 1px;
+        }
+        .ig-prompt-card a {
+            color: #0095F6;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="ig-login-layout anim-fade-in">
+        <!-- Forms Stack Column -->
+        <div class="auth-forms-column">
+            <!-- Form Card -->
+            <div class="ig-card">
+                <div class="ig-logo">CodeAlpha Social</div>
+                <div style="font-size: 0.88rem; color: #8e8e8e; font-weight: 600; line-height: 1.3; margin-bottom: 20px;">
+                    Sign up to see photos and videos from your friends.
+                </div>
+
+                <form id="register-form" enctype="multipart/form-data">
+                    <!-- Avatar Upload Picker -->
+                    <div class="profile-upload-container" style="margin-bottom: 15px;">
+                        <img src="/assets/images/default-avatar.svg" id="avatar-img-preview" class="avatar-preview" style="width: 76px; height: 76px; border: 2px solid #DBDBDB;" alt="Avatar preview">
+                        <label for="profile-image-upload" class="file-upload-label" style="font-size: 0.75rem; padding: 4px 10px; border-color: #DBDBDB; color: #262626; background: #fafafa; border-radius: 4px;">Choose Photo</label>
+                        <input type="file" id="profile-image-upload" accept="image/*" style="display: none;">
+                    </div>
+
+                    <div class="ig-input-container">
+                        <input type="text" name="name" class="ig-input" placeholder="Full Name" required>
+                    </div>
+                    <div class="ig-input-container">
+                        <input type="text" name="username" class="ig-input" placeholder="Username" required>
+                    </div>
+                    <div class="ig-input-container">
+                        <input type="email" name="email" class="ig-input" placeholder="Email Address" required>
+                    </div>
+                    <div class="ig-input-container">
+                        <input type="password" name="password" class="ig-input" placeholder="Password" required>
+                        <button type="button" class="btn-toggle-password" id="toggle-password" style="display: none;"></button>
+                    </div>
+                    <div class="ig-input-container">
+                        <input type="password" name="confirm_password" class="ig-input" placeholder="Confirm Password" required>
+                        <button type="button" class="btn-toggle-password" id="toggle-confirm-password" style="display: none;"></button>
+                    </div>
+                    
+                    <p style="font-size: 0.72rem; color: #8e8e8e; margin: 15px 0 10px 0; line-height: 1.3;">
+                        People who use our service may have uploaded your contact information to CodeAlpha Social. <a href="#" style="color: #00376B; font-weight: 600;">Learn More</a>
+                    </p>
+                    <p style="font-size: 0.72rem; color: #8e8e8e; margin-bottom: 15px; line-height: 1.3;">
+                        By signing up, you agree to our <a href="#" style="color: #00376B; font-weight: 600;">Terms</a>, <a href="#" style="color: #00376B; font-weight: 600;">Privacy Policy</a> and <a href="#" style="color: #00376B; font-weight: 600;">Cookies Policy</a>.
+                    </p>
+
+                    <button type="submit" class="btn-ig-submit btn-submit" id="btn-register">Sign Up</button>
+                </form>
+            </div>
+
+            <!-- Toggle Card -->
+            <div class="ig-prompt-card">
+                Have an account? <a href="/login.html">Log In</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/js/utils.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/auth.js"></script>
+</body>
+</html>

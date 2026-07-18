@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Creators & Posts • CodeAlpha Social</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="/css/animations.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <style>
+        .search-layout {
+            max-width: 935px;
+            margin: 32px auto 0;
+            padding: 0 20px 80px;
+        }
+        .search-bar-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        .search-input-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+        }
+        .search-icon-big {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.25rem;
+            color: var(--gray-400);
+        }
+        .search-input-big {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            font-size: 1.05rem;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            background-color: var(--white);
+            outline: none;
+            box-shadow: var(--shadow-soft);
+            transition: border-color var(--transition-fast);
+        }
+        .search-input-big:focus {
+            border-color: var(--primary-color);
+        }
+        .search-results-section {
+            margin-bottom: 48px;
+        }
+        .search-section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--gray-500);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .users-results-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .user-result-card {
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: var(--shadow-soft);
+        }
+        .user-result-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .user-result-info {
+            flex: 1;
+        }
+        .user-result-username {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--dark-text);
+        }
+        .user-result-name {
+            font-size: 0.82rem;
+            color: var(--gray-text);
+        }
+        .btn-view-profile {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 20px;
+            background-color: var(--primary-color);
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-layout anim-fade-in" style="margin-top: 24px;">
+        <!-- Big Search Bar -->
+        <div class="search-bar-container">
+            <div class="search-input-wrapper">
+                <span class="search-icon-big">🔍</span>
+                <input type="text" id="search-page-input" class="search-input-big" placeholder="Search creators or posts captions..." autofocus>
+            </div>
+        </div>
+
+        <!-- Matched Creators Section -->
+        <section class="search-results-section" id="users-results-section" style="display: none;">
+            <h2 class="search-section-title">Creators</h2>
+            <div class="users-results-list" id="users-results-wrapper">
+                <!-- Filled dynamically -->
+            </div>
+        </section>
+
+        <!-- Matched Posts Section -->
+        <section class="search-results-section" id="posts-results-section" style="display: none;">
+            <h2 class="search-section-title">Posts</h2>
+            <div class="posts-grid" id="posts-results-wrapper">
+                <!-- Filled dynamically -->
+            </div>
+        </section>
+
+        <!-- Empty search explorer prompt -->
+        <div id="search-empty-state" class="empty-state">
+            <div class="empty-state-icon">🔍</div>
+            <div class="empty-state-title">Search CodeAlpha Social</div>
+            <p>Type keywords to search usernames, full names, or post captions.</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/js/utils.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/search.js"></script>
+</body>
+</html>

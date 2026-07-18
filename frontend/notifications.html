@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications • CodeAlpha Social</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/animations.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <style>
+        .notifications-layout {
+            max-width: 600px;
+            margin: 32px auto 0;
+            padding: 0 20px 80px;
+        }
+        .notifications-card-header {
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            padding: 20px 24px;
+            border-bottom: none;
+        }
+        .notifications-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+        .notifications-list {
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+            padding: 10px 24px;
+            display: flex;
+            flex-direction: column;
+        }
+        .notification-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        .notification-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .notification-sender-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .notification-text-content {
+            font-size: 0.88rem;
+            line-height: 1.4;
+        }
+        .notification-sender-name {
+            font-weight: 700;
+            margin-right: 4px;
+        }
+        .notification-time {
+            font-size: 0.72rem;
+            color: var(--gray-400);
+            display: block;
+            margin-top: 2px;
+        }
+        .notification-post-thumb {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+            border: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="notifications-layout anim-fade-in" style="margin-top: 24px;">
+        <!-- Header -->
+        <div class="notifications-card-header">
+            <h1 class="notifications-title">Notifications</h1>
+        </div>
+
+        <!-- Scroll list -->
+        <div class="notifications-list" id="notifications-wrapper">
+            <!-- Loading indicator -->
+            <div style="text-align: center; padding: 20px;" class="spinner-container">
+                <span class="spinner"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/js/utils.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/notifications.js"></script>
+</body>
+</html>

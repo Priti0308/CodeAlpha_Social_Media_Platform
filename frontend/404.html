@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found • CodeAlpha Social</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/animations.css">
+    <style>
+        /* CSS overrides for the premium 404 experience */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #F8FAFC 0%, #E2E8F0 100%);
+            font-family: var(--font-family);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: auto;
+        }
+
+        .error-container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            pointer-events: none; /* Allows canvas mouseevents through, card overrides this */
+        }
+
+        .error-card {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.08), 0 15px 25px -10px rgba(0, 0, 0, 0.05);
+            padding: 50px 40px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            pointer-events: auto; /* Catch events on the card */
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: transform 0.15s ease-out, box-shadow var(--transition-fast);
+        }
+        
+        .error-card:hover {
+            box-shadow: 0 30px 60px -20px rgba(37, 99, 235, 0.15), 0 20px 35px -15px rgba(0, 0, 0, 0.06);
+        }
+
+        .glowing-404 {
+            font-size: 8rem;
+            font-weight: 800;
+            line-height: 0.9;
+            background: linear-gradient(135deg, #2563EB 0%, #3B82F6 50%, #60A5FA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 8px 16px rgba(37, 99, 235, 0.15));
+            animation: float 4s ease-in-out infinite;
+            transform: translateZ(50px);
+        }
+
+        .error-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 10px;
+            transform: translateZ(30px);
+        }
+
+        .error-desc {
+            font-size: 0.95rem;
+            color: var(--gray-text);
+            line-height: 1.5;
+            margin-bottom: 30px;
+            padding: 0 10px;
+            transform: translateZ(20px);
+        }
+
+        .actions-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            transform: translateZ(40px);
+        }
+
+        .heart-beat-active {
+            animation: heartBeat 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateZ(50px) translateY(0); }
+            50% { transform: translateZ(50px) translateY(-8px); }
+        }
+
+        @media (max-width: 480px) {
+            .glowing-404 {
+                font-size: 6rem;
+            }
+            .error-card {
+                padding: 40px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas Background for Interactive Social React Icons -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Centered Glassmorphic Content Frame -->
+    <div class="error-container">
+        <div class="error-card" id="glass-card">
+            <div class="glowing-404">404</div>
+            <h2 class="error-title">Page Not Found</h2>
+            <p class="error-desc">
+                The content you are looking for has either been deleted, renamed, or lives in another digital universe.
+            </p>
+            
+            <div class="actions-container">
+                <!-- Support increment helper -->
+                <button id="like-page-btn" class="btn btn-secondary btn-round" style="border: 1px solid var(--border-color);">
+                    ❤️ Love this page? <span id="like-count" style="font-weight:700; margin-left:4px;">0</span>
+                </button>
+
+                <a href="/home.html" class="btn btn-primary btn-round btn-submit" style="padding: 12px 28px; width: 100%; max-width: 200px;">
+                    Back to Feed
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/js/utils.js"></script>
+    <script src="/js/main.js"></script>
+    <script>
+        // Inline script logic to manage Canvas particles & 3D tilt mechanics
+        document.addEventListener('DOMContentLoaded', () => {
+            initCanvasParticles();
+            initCard3DTilt();
+            initLikeCounter();
+        });
+
+        // 1. HTML5 Canvas Particles System
+        function initCanvasParticles() {
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            const particles = [];
+            const particleCount = Math.min(60, Math.floor((width * height) / 25000));
+            const mouse = { x: -1000, y: -1000, radius: 130 };
+
+            // Colors tailored to CodeAlpha theme
+            const colors = [
+                'rgba(37, 99, 235, 0.18)',  // Primary Blue
+                'rgba(96, 165, 250, 0.22)', // Light Blue
+                'rgba(236, 72, 153, 0.18)', // Pink/Red Heart
+                'rgba(139, 92, 246, 0.18)', // Violet
+                'rgba(245, 158, 11, 0.18)'  // Amber
+            ];
+
+            // Particle constructor
+            class Particle {
+                constructor() {
+                    this.reset();
+                    // Distribute across screen initially
+                    this.y = Math.random() * height;
+                }
+
+                reset() {
+                    this.x = Math.random() * width;
+                    this.y = height + 30; // Start below screen
+                    this.size = Math.random() * 12 + 10;
+                    this.vx = (Math.random() - 0.5) * 0.8;
+                    this.vy = -(Math.random() * 0.8 + 0.3); // Upward float
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
+                    this.type = ['heart', 'bubble', 'plane', 'star'][Math.floor(Math.random() * 4)];
+                    this.angle = Math.random() * Math.PI * 2;
+                    this.spin = (Math.random() - 0.5) * 0.01;
+                }
+
+                update() {
+                    // Normal drift
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.angle += this.spin;
+
+                    // Mouse repulsion force
+                    const dx = this.x - mouse.x;
+                    const dy = this.y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < mouse.radius) {
+                        const force = (mouse.radius - dist) / mouse.radius;
+                        const angle = Math.atan2(dy, dx);
+                        this.vx += Math.cos(angle) * force * 1.5;
+                        this.vy += Math.sin(angle) * force * 1.5;
+                    }
+
+                    // Apply gentle drag
+                    this.vx *= 0.94;
+                    if (this.vy < -2) this.vy *= 0.9; // Limit rapid vertical movement
+
+                    // Recycle particle if out of bounds
+                    if (this.y < -30 || this.x < -30 || this.x > width + 30) {
+                        this.reset();
+                    }
+                }
+
+                draw() {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.angle);
+                    ctx.fillStyle = this.color;
+                    ctx.strokeStyle = this.color.replace(/[\d\.]+\)$/, '0.3)');
+                    ctx.lineWidth = 1.5;
+
+                    const size = this.size;
+
+                    if (this.type === 'heart') {
+                        // Draw Heart
+                        ctx.beginPath();
+                        ctx.moveTo(0, size / 4);
+                        ctx.quadraticCurveTo(0, -size / 2, -size / 2, -size / 2);
+                        ctx.quadraticCurveTo(-size, -size / 2, -size, size / 4);
+                        ctx.quadraticCurveTo(-size, size * 0.8, 0, size * 1.3);
+                        ctx.quadraticCurveTo(size, size * 0.8, size, size / 4);
+                        ctx.quadraticCurveTo(size, -size / 2, size / 2, -size / 2);
+                        ctx.quadraticCurveTo(0, -size / 2, 0, size / 4);
+                        ctx.closePath();
+                        ctx.fill();
+                    } else if (this.type === 'bubble') {
+                        // Draw Chat Bubble
+                        ctx.beginPath();
+                        ctx.arc(0, 0, size * 0.8, 0, Math.PI * 2 * 0.85);
+                        ctx.lineTo(-size * 0.7, size * 0.9);
+                        ctx.lineTo(-size * 0.2, size * 0.7);
+                        ctx.closePath();
+                        ctx.fill();
+                    } else if (this.type === 'plane') {
+                        // Draw Paper Plane
+                        ctx.beginPath();
+                        ctx.moveTo(-size * 0.8, -size * 0.8);
+                        ctx.lineTo(size * 0.9, 0);
+                        ctx.lineTo(-size * 0.4, size * 0.4);
+                        ctx.lineTo(-size * 0.8, size * 0.8);
+                        ctx.lineTo(-size * 0.3, size * 0.2);
+                        ctx.closePath();
+                        ctx.fill();
+                    } else {
+                        // Draw Star / Accent Sparkle
+                        ctx.beginPath();
+                        for (let i = 0; i < 5; i++) {
+                            ctx.lineTo(Math.cos((18 + i * 72) * Math.PI / 180) * size * 0.8,
+                                       Math.sin((18 + i * 72) * Math.PI / 180) * size * 0.8);
+                            ctx.lineTo(Math.cos((54 + i * 72) * Math.PI / 180) * size * 0.3,
+                                       Math.sin((54 + i * 72) * Math.PI / 180) * size * 0.3);
+                        }
+                        ctx.closePath();
+                        ctx.fill();
+                    }
+                    ctx.restore();
+                }
+            }
+
+            // Create initial particles
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            // Click listener on canvas to spawn bursts
+            canvas.addEventListener('click', (e) => {
+                const burstCount = 8;
+                for (let i = 0; i < burstCount; i++) {
+                    const p = new Particle();
+                    p.x = e.clientX;
+                    p.y = e.clientY;
+                    p.vx = (Math.random() - 0.5) * 5;
+                    p.vy = (Math.random() - 0.5) * 5;
+                    particles.push(p);
+                    // Remove extra particles if they build up
+                    if (particles.length > 120) particles.shift();
+                }
+            });
+
+            // Track mouse coords
+            window.addEventListener('mousemove', (e) => {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+            });
+
+            // Reset mouse on leave
+            window.addEventListener('mouseout', () => {
+                mouse.x = -1000;
+                mouse.y = -1000;
+            });
+
+            // Resize handler
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            // Spawner timer to ensure background is always active
+            setInterval(() => {
+                if (particles.length < particleCount) {
+                    particles.push(new Particle());
+                }
+            }, 1000);
+
+            // Loop
+            function tick() {
+                ctx.clearRect(0, 0, width, height);
+
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+
+                requestAnimationFrame(tick);
+            }
+
+            requestAnimationFrame(tick);
+        }
+
+        // 2. Interactive Card 3D Tilt Effect
+        function initCard3DTilt() {
+            const card = document.getElementById('glass-card');
+            if (!card) return;
+
+            window.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                
+                // Get mouse coordinates relative to the card center
+                const cardX = rect.left + rect.width / 2;
+                const cardY = rect.top + rect.height / 2;
+                
+                const dx = e.clientX - cardX;
+                const dy = e.clientY - cardY;
+
+                // Max rotation angles (degrees)
+                const maxRotateX = 12;
+                const maxRotateY = -12;
+
+                // Calculate ratios based on viewport sizes (to prevent wild jumps)
+                const rotateX = (dy / (window.innerHeight / 2)) * maxRotateX;
+                const rotateY = (dx / (window.innerWidth / 2)) * maxRotateY;
+
+                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            // Reset when mouse moves out of window
+            window.addEventListener('mouseout', () => {
+                card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+            });
+        }
+
+        // 3. Heartbeat Like Counter Persistence
+        function initLikeCounter() {
+            const btn = document.getElementById('like-page-btn');
+            const counter = document.getElementById('like-count');
+            
+            // Read from LocalStorage or generate randomized base
+            let likes = parseInt(localStorage.getItem('error_page_likes'));
+            if (isNaN(likes) || likes < 1) {
+                likes = Math.floor(Math.random() * 150) + 120;
+            }
+            counter.innerText = likes;
+
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    likes++;
+                    counter.innerText = likes;
+                    localStorage.setItem('error_page_likes', likes);
+
+                    // Add heartbeat class
+                    btn.classList.add('heart-beat-active');
+                    btn.style.color = '#EF4444';
+                    btn.style.borderColor = '#FCA5A5';
+                    btn.style.background = '#FEF2F2';
+                    
+                    setTimeout(() => {
+                        btn.classList.remove('heart-beat-active');
+                    }, 400);
+
+                    // Burst floating hearts
+                    const rect = btn.getBoundingClientRect();
+                    const canvas = document.getElementById('particle-canvas');
+                    if (canvas) {
+                        const clickEvent = new MouseEvent('click', {
+                            clientX: rect.left + rect.width / 2,
+                            clientY: rect.top
+                        });
+                        canvas.dispatchEvent(clickEvent);
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

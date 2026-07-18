@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile • CodeAlpha Social</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/animations.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+    <div class="edit-profile-layout anim-fade-in" style="margin-top: 24px;">
+        <div class="edit-profile-card">
+            <h1 class="edit-profile-title">Edit Profile</h1>
+
+            <form enctype="multipart/form-data">
+                <!-- Cover & Avatar Preview Section -->
+                <div class="previews-section" style="position: relative; width: 100%; height: 200px; margin-bottom: 65px;">
+                    <!-- Cover -->
+                    <div id="cover-preview-fallback" style="width: 100%; height: 160px; border-radius: var(--radius-md); background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);"></div>
+                    <img src="" class="cover-edit-preview" id="cover-preview-img" style="display: none; width: 100%; height: 160px; object-fit: cover; border-radius: var(--radius-md);" alt="Cover banner">
+                    <label for="cover-image-upload-input" class="edit-image-btn edit-cover-btn" style="position: absolute; top: 15px; right: 15px; background: #FFFFFF; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer; border: 1px solid var(--border-color); box-shadow: var(--shadow-soft);">Change Cover</label>
+                    <input type="file" id="cover-image-upload-input" accept="image/*" style="display: none;">
+
+                    <!-- Avatar -->
+                    <div class="avatar-edit-preview-wrapper" style="position: absolute; bottom: -20px; left: 30px; width: 90px; height: 90px; border-radius: 50%; border: 3px solid #FFFFFF; overflow: hidden; box-shadow: var(--shadow-medium); z-index: 10;">
+                        <img src="/assets/images/default-avatar.svg" class="avatar-edit-preview" id="avatar-preview-img" style="width: 100%; height: 100%; object-fit: cover;" alt="Avatar">
+                    </div>
+                    <label for="profile-image-upload-input" class="edit-image-btn edit-avatar-btn" style="position: absolute; bottom: -15px; left: 140px; background: #FFFFFF; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer; border: 1px solid var(--border-color); box-shadow: var(--shadow-soft); z-index: 10;">Change Photo</label>
+                    <input type="file" id="profile-image-upload-input" accept="image/*" style="display: none;">
+                </div>
+
+                <!-- Full Name -->
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" name="name" class="form-input" placeholder="Full Name">
+                </div>
+
+                <!-- Username -->
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" class="form-input" placeholder="Username" required>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group" style="display: none;">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" name="email" class="form-input" placeholder="Email" required>
+                </div>
+
+                <!-- Bio -->
+                <div class="form-group">
+                    <label class="form-label">Bio</label>
+                    <textarea name="bio" class="form-input" placeholder="Write something about yourself..." rows="4" maxlength="500"></textarea>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="actions-row">
+                    <a href="/profile.html" class="btn btn-secondary btn-round">Cancel</a>
+                    <button type="submit" class="btn btn-primary btn-round">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/js/utils.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/profile.js"></script>
+</body>
+</html>
