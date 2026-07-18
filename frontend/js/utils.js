@@ -1,11 +1,21 @@
 // utils.js - Core Frontend Helpers and Token Storage Managers
 
+const BACKEND_URL = 'https://codealpha-social-media-platform-3i8o.onrender.com';
 const BACKEND_PORT = '5003';
+
 function getApiUrl(path) {
-    const base = window.location.port === BACKEND_PORT
-        ? ''
-        : `${window.location.protocol}//${window.location.hostname}:${BACKEND_PORT}`;
-    return `${base}${path}`;
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        const base = window.location.port === BACKEND_PORT
+            ? ''
+            : `${window.location.protocol}//${window.location.hostname}:${BACKEND_PORT}`;
+        return `${base}${path}`;
+    }
+    
+    if (window.location.hostname.includes('onrender.com')) {
+        return path;
+    }
+    
+    return `${BACKEND_URL}${path}`;
 }
 
 // 1. Toast Notification system
@@ -117,16 +127,29 @@ window.addEventListener('error', function(e) {
     if (target && (target.tagName === 'IMG' || target.tagName === 'VIDEO' || target.tagName === 'SOURCE')) {
         const srcAttr = target.tagName === 'SOURCE' ? 'src' : target.src ? 'src' : 'currentSrc';
         const src = target[srcAttr];
-        if (src && src.includes('/uploads/') && !src.includes(`:${BACKEND_PORT}`)) {
-            try {
-                const url = new URL(src);
-                url.port = BACKEND_PORT;
-                target[srcAttr] = url.toString();
-                if (target.tagName === 'VIDEO') {
-                    target.load();
+        if (src && src.includes('/uploads/')) {
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const backendDomain = 'codealpha-social-media-platform-3i8o.onrender.com';
+            if (isLocal && !src.includes(`:${BACKEND_PORT}`)) {
+                try {
+                    const url = new URL(src);
+                    url.port = BACKEND_PORT;
+                    target[srcAttr] = url.toString();
+                    if (target.tagName === 'VIDEO') target.load();
+                } catch (err) {
+                    console.error('Error rewriting media port:', err);
                 }
-            } catch (err) {
-                console.error('Error rewriting media port:', err);
+            } else if (!isLocal && !src.includes(backendDomain)) {
+                try {
+                    const url = new URL(src);
+                    url.host = backendDomain;
+                    url.port = '';
+                    url.protocol = 'https:';
+                    target[srcAttr] = url.toString();
+                    if (target.tagName === 'VIDEO') target.load();
+                } catch (err) {
+                    console.error('Error rewriting production media url:', err);
+                }
             }
         }
     }
