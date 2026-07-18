@@ -1,0 +1,1 @@
+A Mini Social Media Platform built using HTML, CSS, JavaScript, Express.js, and MongoDB. It allows users to register, create posts, comment, like posts, follow other users, and manage their profiles. Developed as part of the CodeAlpha Web Development Internship.
