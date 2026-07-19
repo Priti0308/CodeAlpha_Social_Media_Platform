@@ -121,21 +121,28 @@ function renderPostMedia(mediaUrl, className = "post-image", showControls = true
     }
 }
 
-// 5. Global Media Port Redirector for separate frontend/backend server ports (e.g. 8081 static vs 5003 API)
+// 5. Global Media Port Redirector & Premium Image Fallbacks for ephemeral files (CORS/CORP and 404 handler)
 window.addEventListener('error', function(e) {
     const target = e.target;
     if (target && (target.tagName === 'IMG' || target.tagName === 'VIDEO' || target.tagName === 'SOURCE')) {
         const srcAttr = target.tagName === 'SOURCE' ? 'src' : target.src ? 'src' : 'currentSrc';
         const src = target[srcAttr];
+        
+        // Prevent infinite retry loops for fallbacks
+        if (target.dataset.hasFallback) return;
+
         if (src && src.includes('/uploads/')) {
             const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
             const backendDomain = 'codealpha-social-media-platform-3i8o.onrender.com';
+            
+            // Try rewriting to local backend or production backend first
             if (isLocal && !src.includes(`:${BACKEND_PORT}`)) {
                 try {
                     const url = new URL(src);
                     url.port = BACKEND_PORT;
                     target[srcAttr] = url.toString();
                     if (target.tagName === 'VIDEO') target.load();
+                    return; // Attempt reloading
                 } catch (err) {
                     console.error('Error rewriting media port:', err);
                 }
@@ -147,10 +154,20 @@ window.addEventListener('error', function(e) {
                     url.protocol = 'https:';
                     target[srcAttr] = url.toString();
                     if (target.tagName === 'VIDEO') target.load();
+                    return; // Attempt reloading
                 } catch (err) {
                     console.error('Error rewriting production media url:', err);
                 }
             }
+        }
+
+        // If it still fails (e.g., 404 Not Found on ephemeral filesystem), apply fallbacks
+        target.dataset.hasFallback = 'true';
+        if (target.className.includes('avatar') || target.id === 'stories-self-avatar' || target.id === 'create-post-avatar') {
+            target[srcAttr] = '/assets/images/default-avatar.svg';
+        } else {
+            // Premium SVG fallback card for broken post media content
+            target[srcAttr] = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f3f4f6"/><text x="50" y="50" font-family="sans-serif" font-size="8" fill="%239ca3af" text-anchor="middle" dominant-baseline="middle">Media Unavailable</text></svg>';
         }
     }
 }, true);

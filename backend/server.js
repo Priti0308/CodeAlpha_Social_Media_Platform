@@ -16,7 +16,8 @@ const app = express();
 
 // Security Middlewares
 app.use(helmet({
-  contentSecurityPolicy: false // Allows loading images from external sources/blobs easily in development
+  contentSecurityPolicy: false, // Allows loading images from external sources/blobs easily in development
+  crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 app.use(cors());
 app.use(mongoSanitize());
