@@ -1,4 +1,5 @@
 const Story = require('../models/Story');
+const { fileToBase64 } = require('../utils/fileHelper');
 
 // @desc    Create Story
 // @route   POST /api/stories/create
@@ -9,7 +10,7 @@ exports.createStory = async (req, res, next) => {
       return res.status(400).json({ success: false, error: 'Please upload an image for your story.' });
     }
 
-    const storyImagePath = `/uploads/${req.file.filename}`;
+    const storyImagePath = fileToBase64(req.file);
 
     const story = await Story.create({
       userId: req.user.id,

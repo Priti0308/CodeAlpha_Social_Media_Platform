@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { fileToBase64 } = require('../utils/fileHelper');
 
 // Helper to generate JWT Token
 const generateToken = (id) => {
@@ -55,7 +56,7 @@ exports.registerUser = async (req, res, next) => {
     // Process profile image path if uploaded
     let profileImagePath = '/assets/images/default-avatar.svg';
     if (req.file) {
-      profileImagePath = `/uploads/${req.file.filename}`;
+      profileImagePath = fileToBase64(req.file);
     }
 
     // 6. Create User

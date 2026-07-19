@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const Post = require('../models/Post');
 const Notification = require('../models/Notification');
+const { fileToBase64 } = require('../utils/fileHelper');
 
 // @desc    Get User Profile
 // @route   GET /api/users/profile/:username
@@ -73,10 +74,10 @@ exports.editUserProfile = async (req, res, next) => {
 
     if (req.files) {
       if (req.files.profileImage && req.files.profileImage[0]) {
-        user.profileImage = `/uploads/${req.files.profileImage[0].filename}`;
+        user.profileImage = fileToBase64(req.files.profileImage[0]);
       }
       if (req.files.coverImage && req.files.coverImage[0]) {
-        user.coverImage = `/uploads/${req.files.coverImage[0].filename}`;
+        user.coverImage = fileToBase64(req.files.coverImage[0]);
       }
     }
 

@@ -2,6 +2,7 @@ const Post = require('../models/Post');
 const Comment = require('../models/Comment');
 const Notification = require('../models/Notification');
 const User = require('../models/User');
+const { fileToBase64 } = require('../utils/fileHelper');
 
 // @desc    Create Post
 // @route   POST /api/posts/create
@@ -14,7 +15,7 @@ exports.createPost = async (req, res, next) => {
       return res.status(400).json({ success: false, error: 'Please upload a media file to share.' });
     }
 
-    const postImagePath = `/uploads/${req.file.filename}`;
+    const postImagePath = fileToBase64(req.file);
 
     const post = await Post.create({
       userId: req.user.id,
