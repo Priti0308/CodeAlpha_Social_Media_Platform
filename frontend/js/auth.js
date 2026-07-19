@@ -94,7 +94,8 @@ async function handleRegisterSubmit(e) {
     formData.append('confirmPassword', confirmPassword);
     
     if (fileInput && fileInput.files[0]) {
-        formData.append('profileImage', fileInput.files[0]);
+        const compressedProfileImg = await compressImageIfPossible(fileInput.files[0]);
+        formData.append('profileImage', compressedProfileImg);
     }
 
     try {

@@ -426,8 +426,11 @@ function setupCreatePostForm() {
                 return;
             }
 
+            const rawFile = imgInput.files[0];
+            const file = await compressImageIfPossible(rawFile);
+
             const formData = new FormData();
-            formData.append('image', imgInput.files[0]);
+            formData.append('image', file);
             formData.append('caption', form.caption.value.trim());
 
             try {
@@ -495,7 +498,8 @@ function setupStoryUploader() {
     }
 }
 
-async function uploadStoryFile(file) {
+async function uploadStoryFile(rawFile) {
+    const file = await compressImageIfPossible(rawFile);
     if (file.size > 10 * 1024 * 1024) {
         showToast('Story image must be less than 10MB.', 'error');
         return;

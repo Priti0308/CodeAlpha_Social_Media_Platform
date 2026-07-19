@@ -121,6 +121,60 @@ function renderPostMedia(mediaUrl, className = "post-image", showControls = true
     }
 }
 
+// Compresses image files before sending to server (keeps base64 sizes small & timeline loading fast)
+function compressImageIfPossible(file, maxWidth = 1080, maxHeight = 1080, quality = 0.7) {
+    return new Promise((resolve) => {
+        // Skip for non-images, gifs (to preserve animation), and files already under 150KB
+        if (!file.type.startsWith('image/') || file.type === 'image/gif' || file.size < 150 * 1024) {
+            return resolve(file);
+        }
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height = Math.round((height * maxWidth) / width);
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width = Math.round((width * maxHeight) / height);
+                        height = maxHeight;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        const compressedFile = new File([blob], file.name, {
+                            type: 'image/jpeg',
+                            lastModified: Date.now()
+                        });
+                        resolve(compressedFile);
+                    } else {
+                        resolve(file);
+                    }
+                }, 'image/jpeg', quality);
+            };
+            img.onerror = () => resolve(file);
+        };
+        reader.onerror = () => resolve(file);
+    });
+}
+
+
 // 5. Global Media Port Redirector & Premium Image Fallbacks for ephemeral files (CORS/CORP and 404 handler)
 window.addEventListener('error', function(e) {
     const target = e.target;

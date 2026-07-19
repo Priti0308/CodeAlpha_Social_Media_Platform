@@ -406,10 +406,12 @@ async function handleEditProfileSubmit(e) {
     formData.append('bio', bio);
     
     if (avatarInput && avatarInput.files[0]) {
-        formData.append('profileImage', avatarInput.files[0]);
+        const compressedAvatar = await compressImageIfPossible(avatarInput.files[0]);
+        formData.append('profileImage', compressedAvatar);
     }
     if (coverInput && coverInput.files[0]) {
-        formData.append('coverImage', coverInput.files[0]);
+        const compressedCover = await compressImageIfPossible(coverInput.files[0]);
+        formData.append('coverImage', compressedCover);
     }
 
     try {
@@ -552,14 +554,15 @@ function setupCreateFormListener() {
         submitBtn.innerText = 'Sharing...';
 
         try {
+            const compressedFile = await compressImageIfPossible(file);
             if (type === 'story') {
-                if (file.size > 10 * 1024 * 1024) {
+                if (compressedFile.size > 10 * 1024 * 1024) {
                     showToast('Story image must be less than 10MB.', 'error');
                     submitBtn.disabled = false;
                     submitBtn.innerText = 'Share';
                     return;
                 }
-                formData.append('image', file);
+                formData.append('image', compressedFile);
                 
                 showToast('Adding to Story...', 'info');
                 const response = await fetch(getApiUrl('/api/stories/create'), {
@@ -578,7 +581,7 @@ function setupCreateFormListener() {
                 }
             } else {
                 // Post or Reel
-                formData.append('image', file);
+                formData.append('image', compressedFile);
                 formData.append('caption', captionInput.value.trim());
                 if (type === 'reel') {
                     formData.append('isReel', 'true');
